@@ -104,7 +104,7 @@ select
 
 2.Correlation Coefficient
 formula:
-!http://www.statisticshowto.com/wp-content/uploads/2009/11/pearsons.gif 250x100!
+!http://upload.wikimedia.org/math/c/a/6/ca68fbe94060a2591924b380c9bc4e27.png!
 
 <pre class="terminal"><code>
 select 

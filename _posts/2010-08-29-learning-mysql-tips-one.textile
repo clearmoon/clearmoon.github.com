@@ -1,0 +1,19 @@
+---
+layout: post
+title: Learning MySQL Tips One
+---
+
+h1. {{ page.title }}
+
+p(meta). 29 Aug 2010 - China
+
+*Summary*
+
+1.Column Functions
+<pre class="terminal"><code>count(),min(),max(),sum(),avg(),distinct</code></pre>
+
+2.Group Functions
+<pre class="terminal"><code>group by colu1,colu2 ... having ...</code></pre>
+
+
+*Sequence*

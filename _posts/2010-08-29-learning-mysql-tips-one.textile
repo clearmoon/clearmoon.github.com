@@ -17,3 +17,25 @@ p(meta). 29 Aug 2010 - China
 
 
 *Sequence*
+
+1.AUTO_INCREMENT
+It will generate consecutive integers(unsigned int,tinyint... in mysql) with 1 as start normally,and never 'NULL';It's Index must be 'primary key' or 'unique';BDB engine will increase from current 'max value' + 1 and MyISAM/InnoDB engine will use the 'min integer' never used.
+<pre class="terminal"><code>id int unsigned not null auto_increment primary key;</code></pre>
+OR
+<pre class="terminal"><code>id int unsigned not null auto_increment unique; </code></pre>
+
+2.Query Sequence
+Only one connection in every database session.
+<pre class="terminal"><code>select last_insert_id(); </code></pre>
+
+3.Reset Next larger 1 than Current
+<pre class="terminal"><code>alter table tbl_name auto_increment = 1;</code></pre>
+
+4.Mutil-Sequence
+Some column linked with auto_increment column,so they will become a index.AI Column Must be the LAST and PRIMARY KEY couldn't contain NULL value.
+<pre class="terminal"><code>
+id   int unsigned not null auto_increment,
+name varchar(20) not null,
+primary key(name,id)
+</code></pre>
+

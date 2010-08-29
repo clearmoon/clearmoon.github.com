@@ -104,16 +104,16 @@ select
 
 2.Correlation Coefficient
 formula:
-!http://www.statisticshowto.com/wp-content/uploads/2009/11/pearsons.gif!
+!http://www.statisticshowto.com/wp-content/uploads/2009/11/pearsons.gif 250x100!
 
 <pre class="terminal"><code>
 select 
 @n := count(id),
-@sumxy := sum(x*y),//xy的和
-@sumxx := sum(x*x),//x的平方和
-@sumx := sum(x),//x的和
-@sumy := sum(y), //y的和
-@meany := avg(y),//y的平均数
+@sumxy := sum(x*y),
+@sumxx := sum(x*x),
+@sumx := sum(x),
+@sumy := sum(y), 
+@meany := avg(y),
 @meanx := avg(x)
 from tbl_name \G;
 

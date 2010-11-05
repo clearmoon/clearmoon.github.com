@@ -1,0 +1,155 @@
+---
+layout: post
+title: Learning MySQL Tips One
+---
+
+h1. {{ page.title }}
+
+p(meta). 29 Aug 2010 - China
+
+*Summary*
+
+1.Column Functions
+<pre class="terminal"><code>count(),min(),max(),sum(),avg(),distinct</code></pre>
+
+2.Group Functions
+<pre class="terminal"><code>group by colu1,colu2 ... having ...</code></pre>
+
+
+*Sequence*
+
+1.AUTO_INCREMENT
+It will generate consecutive integers(unsigned int,tinyint... in mysql) with 1 as start normally,and never 'NULL';It's Index must be 'primary key' or 'unique';BDB engine will increase from current 'max value' + 1 and MyISAM/InnoDB engine will use the 'min integer' never used.
+<pre class="terminal"><code>id int unsigned not null auto_increment primary key;
+OR
+id int unsigned not null auto_increment unique; </code></pre>
+
+2.Query Sequence
+Only one connection in every database session.
+<pre class="terminal"><code>select last_insert_id(); </code></pre>
+
+3.Reset Next larger 1 than Current
+<pre class="terminal"><code>alter table tbl_name auto_increment = 1;</code></pre>
+
+4.Mutil-Sequence
+Some column linked with auto_increment column,so they will become a index.AI Column Must be the LAST and PRIMARY KEY couldn't contain NULL value.
+<pre class="terminal"><code>
+id   int unsigned not null auto_increment,
+name varchar(20) not null,
+primary key(name,id)
+</code></pre>
+
+5.Counter
+last_insert_id(expr) expresion.
+<pre class="terminal"><code>
+insert into tbl_name (key1,key2) values('xxx',last_insert_id(1))
+on duplicate key update key2 = last_insert_id(key2+2);
+
+select last_insert_id(); _//return key2 value updated_
+</code></pre>
+
+
+*Join*
+
+1.Inner Join
+matches the same row from double tables.
+<pre class="terminal"><code>
+select * from tbl_name1,tbl_name2 where tb1_name1.column1 = tb2_name.column2;
+_also:_
+select * from tbl_name1 inner join tbl_name2 on tb1_name1.column1 = tb2_name.column2;
+
+_if tb1_name1.column1 = tb2_name.column2,we can write shortly:_
+select * from tbl_name1 inner join tbl_name2 using column1;
+
+where used for fliter and On/Using used for join
+</code></pre>
+
+2.Left Join/Right Join
+outside tables join to find different with left table.NULL default
+<pre class="terminal"><code>
+select * from tbl_name1 left join tbl_name2 on tb1_name1.column1 = tb2_name.column2
+where tbl_name2.column2 IS NULL;
+</code></pre>
+
+3.Caculator:
+<pre class="terminal"><code>
+select tb1.id as seq1,tb2.id as seq2,
+tb2.column - tb1.column
+from tbl_name as tb1 left join tbl_name as tb2 
+on tb1.column+1 = tb2.column;
+</code></pre>
+
+
+*Statistical*
+
+1.Linear Regression Analysis
+_Y = b*X + a_
+<pre class="terminal"><code>
+select 
+@n := count(id),
+@sumxy := sum(x*y),//xy的和
+@sumxx := sum(x*x),//x的平方和
+@sumx := sum(x),//x的和
+@sumy := sum(y), //y的和
+@meany := avg(y),//y的平均数
+@meanx := avg(x)
+from tbl_name \G;
+
+select 
+@b ：= (@n*@sumxy - @sumx*@sumy)/(@n*@sumxx - @sumx*@sumx);
+
+select
+@a := (@meany - @b*@meanx);
+</code></pre>
+
+2.Correlation Coefficient
+formula:
+!http://upload.wikimedia.org/math/c/a/6/ca68fbe94060a2591924b380c9bc4e27.png!
+
+<pre class="terminal"><code>
+select 
+@n := count(id),
+@sumxy := sum(x*y),
+@sumxx := sum(x*x),
+@sumx := sum(x),
+@sumy := sum(y), 
+@meany := avg(y),
+@meanx := avg(x)
+from tbl_name \G;
+
+select 
+(@n*@sumxy - @sumx*@sumy)/sqrt((@n*@sumxx - @sumx*@sumx)*(@n*@sumyy - @sumy*@sumy));
+</code></pre>
+
+3.Random and Shuffle Algorithm
+Here is Python implement Shuffle according to MySQL <code>order by rand()</code>.
+<pre class="terminal"><code>
+import itertools,random
+face = ['A','B','C','D']
+sult = [str(i) for i in range(1,13)]
+
+
+def shuff():
+    card = map(lambda x:(x[0]+x[1],random.random()),itertools.product(face,sult))
+    return map(lambda x:x[0],sorted(card,key = lambda x:x[1]))
+
+>>> shuff()
+['C8', 'D6', 'A11', 'B10', 'B3', 'D9', 'C4', 'A4', 'A1', 'C9', 'B2', 'B5', 'D8', 'B12', 'B1', 'D5',
+ 'B6', 'C11', 'A3', 'C3', 'D7', 'A7', 'C7', 'B7', 'A6', 'A5', 'C5', 'D11', 'A10', 'D4', 'A12', 'A2',
+ 'C2', 'D12', 'A9', 'B4', 'C6', 'D3', 'D2', 'D1', 'B9', 'C1', 'D10', 'B8', 'C12', 'A8', 'C10', 'B11']
+>>> shuff()
+['D1', 'A6', 'C2', 'B8', 'B6', 'D2', 'D10', 'A2', 'A9', 'B2', 'D3', 'C1', 'C4', 'B12', 'B9', 'A10',
+ 'D8', 'C3', 'D9', 'C8', 'C5', 'A3', 'A5', 'B5', 'B3', 'D7', 'C12', 'A1', 'B11', 'B4', 'A11', 'C7', 
+'D11', 'D4', 'B1', 'C9', 'A7', 'B10', 'D12', 'D5', 'C6', 'A4', 'B7', 'A12', 'D6', 'C11', 'C10', 'A8']
+
+</code></pre>
+
+*Duplicates*
+
+1.Repeated-Item Write
+<pre class="terminal"><code>
+insert ignore into ... ;//_judge existence_
+replace into ...;//
+insert ... on duplicate update ... ;//_increment for shorchut_
+</src>
+

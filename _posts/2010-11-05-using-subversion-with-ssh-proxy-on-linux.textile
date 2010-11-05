@@ -11,7 +11,7 @@ If you have an repository in some remote server,you may check / update code like
 <pre class="terminal"><code>svn co http://yourdomain/repository</code></pre>
 
 another method to access the repository under your account is referred to as the svn+ssh protocol. As its name indicates, this protocol speaks to the SVN server via SSH. Your SVN client must be provided an URL of the form:
-<pre class="terminal"><code>  svn+ssh://user@ssh.yourdomain.com/repository </code></pre>
+<pre class="terminal"><code>svn+ssh://user@ssh.yourdomain.com/repository </code></pre>
 
 But there is some different scene,your subversion server is behind some network devices or servers.and repository servers with http and frontend device/server can be accessed with ssh.
 
@@ -20,26 +20,26 @@ How can you check/update code localy?
 We all konw Browsers can access web resources with SOCKS proxies. Shall we access the 'hidden' repository with socks proxy?
 of course,the sshd service on the frontend device or server is a good choice of this proxy we need.Further,Proxychains helps us using svn through with the proxy.
 
- *Install*
-<pre class="terminal"><code>  
-fedora# wget http://prdownloads.sourceforge.net/proxychains/proxychains-3.1.tar.gz?download
+ *Installation*
+
+<pre class="terminal"><code>fedora# wget http://prdownloads.sourceforge.net/proxychains/proxychains-3.1.tar.gz
 fedora# tar xzvf proxychains-3.1.tar.gz
 fedora# cd proxychains-3.1 && make && make install  
 </code></pre>
 
  *Configure*
-<pre class="terminal"><code>  
-fedora# echo 'socks5 	127.0.0.1 8801' >> /etc/proxychains.conf
+
+<pre class="terminal"><code>fedora# echo 'socks5 	127.0.0.1 8801' >> /etc/proxychains.conf
 </code></pre>
 
- *Setting Proxy*
-<pre class="terminal"><code>  
-fedora# ssh -qTfnN -D 8801 youraccount@yourdomain
+ *SocksProxy*
+
+<pre class="terminal"><code>fedora# ssh -qTfnN -D 8801 youraccount@yourdomain
 </code></pre>
 
 Now,Let's hava a try.
-<pre class="terminal"><code>  
-fedora# proxychains svn co http://subversion.ip/repository
+
+<pre class="terminal"><code>fedora# proxychains svn co http://subversion.ip/repository
 ......
 ......
 </code></pre>

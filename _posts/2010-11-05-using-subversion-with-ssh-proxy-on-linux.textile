@@ -22,6 +22,7 @@ of course,the sshd service on the frontend device or server is a good choice of 
 
  *Installation*
 
+
 <pre class="terminal"><code>fedora# wget http://prdownloads.sourceforge.net/proxychains/proxychains-3.1.tar.gz
 fedora# tar xzvf proxychains-3.1.tar.gz
 fedora# cd proxychains-3.1 && make && make install  
@@ -29,10 +30,12 @@ fedora# cd proxychains-3.1 && make && make install
 
  *Configure*
 
+
 <pre class="terminal"><code>fedora# echo 'socks5 	127.0.0.1 8801' >> /etc/proxychains.conf
 </code></pre>
 
  *SocksProxy*
+
 
 <pre class="terminal"><code>fedora# ssh -qTfnN -D 8801 youraccount@yourdomain
 </code></pre>
